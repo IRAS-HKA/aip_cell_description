@@ -135,7 +135,7 @@ def generate_launch_description():
     #     servo_yaml = load_yaml("kuka_kr3_cell_description", "config/kuka_servo_config.yaml")
 
     #     changed back due to duplicate package error
-    servo_yaml = load_yaml("kuka_kr3_cell_description", "config/kuka_servo_config.yaml")
+    servo_yaml = load_yaml("kuka_kr10r1100sixx_cell_description", "config/kuka_servo_config.yaml")
     servo_params = {"moveit_servo": servo_yaml}
 
     servo_node = Node(
