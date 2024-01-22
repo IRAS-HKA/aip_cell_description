@@ -8,7 +8,13 @@ source start_docker.sh
 ```
 
 ```bash
-ros2 launch kuka_kr10r1100sixx_cell_description cell.launch.py use_fake_hardware:=false
+ros2 launch kuka_kr10r1100sixx_cell_description cell.launch.py
+# To use real hardware robot switch use_fake_hardware:=false
+```
+
+To open new bash in same container
+```bash
+docker exec -it r2e_cell bash
 ```
 
 ## How to start for C++ debugging
