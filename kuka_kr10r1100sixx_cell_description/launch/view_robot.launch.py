@@ -4,6 +4,8 @@ from launch.event_handlers import OnProcessStart
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from ament_index_python.packages import get_package_share_directory
+import os
 
 
 def generate_launch_description():
@@ -70,6 +72,25 @@ def generate_launch_description():
         arguments=["-d", rviz_config_file],
     )
 
+    # Get SRDF file to publish robot_description_semantic
+    robot_description_semantic_path = os.path.join(
+        get_package_share_directory("kuka_kr10r1100sixx_cell_description"),
+        'config',
+        'kr10_cylinder.srdf'
+    )
+
+    with open(robot_description_semantic_path, 'r') as f:
+        robot_description_semantic = f.read()
+
+    move_group_node = Node(package='moveit_ros_move_group', executable='move_group',
+                       output='screen',
+                       parameters=[{
+                            'robot_description_semantic': robot_description_semantic,
+                            'publish_robot_description_semantic': True,
+                            # More params
+                       }],
+                       )
+
     delay_rviz_after_joint_state_publisher_node = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=joint_state_publisher_node,
@@ -88,6 +109,7 @@ def generate_launch_description():
             joint_state_publisher_node,
             robot_state_publisher_node,
             delay_rviz_after_joint_state_publisher_node,
+            move_group_node
         ]
     )
 
