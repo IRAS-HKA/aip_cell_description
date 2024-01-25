@@ -37,14 +37,14 @@ def generate_launch_description():
     )
     declared_arguments.append(DeclareLaunchArgument(
         "robot_description_file",
-        default_value="kr10r1100sixx.xacro",
+        default_value="kr10_cylinder.xacro",
         description="Robot description file located in <robot_description_package>/urdf/ .",
         )
     )
 
     declared_arguments.append(DeclareLaunchArgument(
         "semantic_description_file",
-        default_value="kr10r1100sixx.srdf",
+        default_value="kr10_cylinder.srdf",
         description="Semantic robot description file located in <robot_description_package>/config/ .",
         )
     )

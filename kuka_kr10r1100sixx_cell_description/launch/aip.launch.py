@@ -24,36 +24,45 @@ def load_yaml(package_name, file_path):
 def generate_launch_description():
     # Declare arguments
     declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "robot_ip",
-            default_value="10.166.32.145",
-            description="IP address by which the robot can be reached.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "use_fake_hardware",
-            default_value="true",
-            description="Start robot with fake hardware mirroring command to its states.",
-        )
-    )
+    declared_arguments.append(DeclareLaunchArgument(
+        "robot_ip",
+        default_value="10.166.32.145",
+        description="IP address by which the robot can be reached.",
+    ))
+    declared_arguments.append(DeclareLaunchArgument(
+        "use_fake_hardware",
+        default_value="true",
+        description="Start robot with fake hardware mirroring command to its states.",
+    ))
     declared_arguments.append(DeclareLaunchArgument(
         "eki_robot_port",
         default_value="54600",
         description="Port by which the robot can be reached."
     ))
-
     declared_arguments.append(DeclareLaunchArgument(
         "eki_io_port",
         default_value="54601",
         description="Port by which the robot can be reached."
     ))
-
     declared_arguments.append(DeclareLaunchArgument(
         "n_io",
         default_value="2",
         description="Port by which the robot can be reached."
+    ))
+    declared_arguments.append(DeclareLaunchArgument(
+        "robot_description_package",
+        default_value="kuka_kr10r1100sixx_cell_description",
+        description="Robot description package",
+    ))
+    declared_arguments.append(DeclareLaunchArgument(
+        "robot_description_file",
+        default_value="kr10_cylinder.xacro",
+        description="Robot description file located in <robot_description_package>/urdf/ .",
+    ))
+    declared_arguments.append(DeclareLaunchArgument(
+        "semantic_description_file",
+        default_value="kr10_cylinder.srdf",
+        description="Semantic robot description file located in <robot_description_package>/config/ .",
     ))
 
     # Initialize Arguments
@@ -62,12 +71,15 @@ def generate_launch_description():
     eki_robot_port = LaunchConfiguration("eki_robot_port")
     eki_io_port = LaunchConfiguration("eki_io_port")
     n_io = LaunchConfiguration("n_io")
+    robot_description_package = LaunchConfiguration("robot_description_package")
+    robot_description_file = LaunchConfiguration("robot_description_file")
+    semantic_description_file = LaunchConfiguration("semantic_description_file")
 
     robot_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution([FindPackageShare("kuka_kr10_description"), "urdf", "kr10r1100sixx.xacro"]),
+            PathJoinSubstitution([FindPackageShare(robot_description_package), "urdf", robot_description_file]),
             " ",
             "use_fake_hardware:=",
             use_fake_hardware,
@@ -86,7 +98,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("kuka_kr10_description"), "config", "kr10r1100sixx.srdf"]
+                [FindPackageShare(robot_description_package), "config", semantic_description_file]
             ),
         ]
     )
@@ -101,8 +113,8 @@ def generate_launch_description():
             "robot_ip": robot_ip,
             "use_fake_hardware": use_fake_hardware,
             "eki_robot_port": eki_robot_port,
-            "robot_description_package": 'kuka_kr10_description',
-            "robot_description_file": "kr10r1100sixx.xacro"
+            "robot_description_package": robot_description_package,
+            "robot_description_file": robot_description_file
         }.items(),
     )
 
@@ -123,8 +135,8 @@ def generate_launch_description():
             "robot_ip": robot_ip,
             "use_fake_hardware": use_fake_hardware,
             "eki_robot_port": eki_robot_port,
-            "robot_description_package": 'kuka_kr10_description',
-            "robot_description_file": "kr10r1100sixx.xacro"
+            "robot_description_package": robot_description_package,
+            "robot_description_file": robot_description_file
         }.items(),
     )
 
