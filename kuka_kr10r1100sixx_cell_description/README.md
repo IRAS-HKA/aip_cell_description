@@ -81,4 +81,4 @@ ros2 run tf2_ros tf2_echo table_link tcp
 - [ ] Greifer ios schalten über smartPad
 - [ ] EKI Schnittstelle um Greifer IOs erweitern/überprüfen
 - [ ] Demoprogramm Roboter fährt über ROS zwischen zwei Posen hin und her
-- [ ] Demoprogramm Roboter fährt und schaltet Greifer Druckluft                           
+- [ ] Demoprogramm Roboter fährt und schaltet Greifer Druckluft

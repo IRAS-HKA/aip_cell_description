@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+    <xacro:include filename="$(find kuka_common)/urdf/common_constants.xacro"/>
+    <xacro:include filename="$(find kuka_common)/urdf/common_materials.xacro"/>
+
+    <xacro:macro name="aip_cell" params="prefix">
+        <link name="${prefix}table_link">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/kr10r1100sixx_cell/visual/table0.001.stl"/>
+                </geometry>
+                <xacro:material_kuka_ral_silver_gray/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/kr10r1100sixx_cell/collision/table0.001.stl"/>
+                </geometry>
+            </collision>
+        </link>
+        <link name="${prefix}shelf">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/kr10r1100sixx_cell/visual/shelf_new.stl"/>
+                </geometry>
+                <xacro:material_kuka_ral_silver_gray/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/kr10r1100sixx_cell/collision/shelf_new.stl"/>
+                </geometry>
+            </collision>
+        </link>
+        <joint name="${prefix}joint_table-shelf" type="fixed">
+            <parent link="${prefix}table_link"/>
+            <child link="${prefix}shelf"/>
+            <origin xyz="0.242 0.806 0.908" rpy="0 0 0"/>
+        </joint>
+
+    </xacro:macro>
+</robot>

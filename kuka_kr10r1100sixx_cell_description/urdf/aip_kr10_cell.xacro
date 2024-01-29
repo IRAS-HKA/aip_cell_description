@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot name="aip_kr10_cell" xmlns:xacro="http://wiki.ros.org/xacro">
+    <xacro:include filename="$(find kuka_kr10r1100sixx_cell_description)/urdf/aip_cell_macro.xacro"/>
+    <xacro:include filename="$(find aip_bosch_gripper)/urdf/gripper_macro.xacro"/>
+    <xacro:include filename="$(find kuka_kr10_description)/urdf/kr10r1100sixx_macro.xacro"/>
+
+    <xacro:arg name="initial_positions_file" default="$(find kuka_kr10r1100sixx_cell_description)/config/initial_positions.yaml"/>
+    <xacro:arg name="robot_ip" default="10.166.32.145"/>
+    <xacro:arg name="eki_robot_port" default="54600"/>
+    <xacro:arg name="use_fake_hardware" default="true"/>
+    <xacro:arg name="prefix" default=""/>
+
+    <xacro:kuka_kr10r1100sixx prefix="$(arg prefix)" initial_positions_file="$(arg initial_positions_file)"
+        robot_ip="$(arg robot_ip)" eki_robot_port="$(arg eki_robot_port)"
+        use_fake_hardware="$(arg use_fake_hardware)"/>
+    <xacro:aip_bosch_gripper prefix="$(arg prefix)"/>
+    <xacro:aip_cell prefix="$(arg prefix)"/>
+
+    <link name="$(arg prefix)world"/>
+    <joint name="$(arg prefix)joint_world-table" type="fixed">
+        <parent link="$(arg prefix)world"/>
+        <child link="$(arg prefix)table_link"/>
+        <origin xyz="0 0.6 0" rpy="0 0 0"/>
+    </joint>
+    <joint name="$(arg prefix)joint_world-base" type="fixed">
+        <parent link="$(arg prefix)world"/>
+        <child link="$(arg prefix)base_link"/>
+        <origin xyz="0.2 1 0.965" rpy="0 0 0"/>
+    </joint>
+    <joint name="$(arg prefix)joint_flange-gripper" type="fixed">
+        <parent link="$(arg prefix)flange"/>
+        <child link="$(arg prefix)gripper_base"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+</robot>

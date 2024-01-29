@@ -50,18 +50,23 @@ def generate_launch_description():
         description="Port by which the robot can be reached."
     ))
     declared_arguments.append(DeclareLaunchArgument(
+        "prefix",
+        default_value="",
+        description="Prefix for every link and joint in the robot description."
+    ))
+    declared_arguments.append(DeclareLaunchArgument(
         "robot_description_package",
         default_value="kuka_kr10r1100sixx_cell_description",
         description="Robot description package",
     ))
     declared_arguments.append(DeclareLaunchArgument(
         "robot_description_file",
-        default_value="kr10_cylinder.xacro",
+        default_value="aip_kr10_cell.xacro",
         description="Robot description file located in <robot_description_package>/urdf/ .",
     ))
     declared_arguments.append(DeclareLaunchArgument(
         "semantic_description_file",
-        default_value="kr10_cylinder.srdf",
+        default_value="aip_kr10_cell.srdf",
         description="Semantic robot description file located in <robot_description_package>/config/ .",
     ))
 
@@ -71,32 +76,26 @@ def generate_launch_description():
     eki_robot_port = LaunchConfiguration("eki_robot_port")
     eki_io_port = LaunchConfiguration("eki_io_port")
     n_io = LaunchConfiguration("n_io")
+    prefix = LaunchConfiguration("prefix")
     robot_description_package = LaunchConfiguration("robot_description_package")
     robot_description_file = LaunchConfiguration("robot_description_file")
     semantic_description_file = LaunchConfiguration("semantic_description_file")
 
     robot_description_content = Command(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution([FindPackageShare(robot_description_package), "urdf", robot_description_file]),
-            " ",
-            "use_fake_hardware:=",
-            use_fake_hardware,
-            " ",
-            "robot_ip:=",
-            robot_ip,
-            " ",
-            "eki_robot_port:=",
-            eki_robot_port,
+            PathJoinSubstitution([FindExecutable(name="xacro")]), " ",
+            PathJoinSubstitution([FindPackageShare(robot_description_package), "urdf", robot_description_file]), " ",
+            "use_fake_hardware:=", use_fake_hardware, " ",
+            "robot_ip:=", robot_ip, " ",
+            "eki_robot_port:=", eki_robot_port, " ",
+            "prefix:=", prefix,
         ]
     )
     robot_description = {"robot_description": robot_description_content}
 
     robot_description_semantic_content = Command(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
+            PathJoinSubstitution([FindExecutable(name="xacro")]), " ",
             PathJoinSubstitution(
                 [FindPackageShare(robot_description_package), "config", semantic_description_file]
             ),
@@ -142,11 +141,6 @@ def generate_launch_description():
 
     kinematics_yaml = load_yaml("kuka_common_moveit_config", "config/kinematics.yaml")
     robot_description_kinematics = {"robot_description_kinematics": kinematics_yaml}
-
-    #     OLD (till 15.12.): 
-    #     servo_yaml = load_yaml("kuka_kr3_cell_description", "config/kuka_servo_config.yaml")
-
-    #     changed back due to duplicate package error
     servo_yaml = load_yaml("kuka_kr10r1100sixx_cell_description", "config/kuka_servo_config.yaml")
     servo_params = {"moveit_servo": servo_yaml}
 

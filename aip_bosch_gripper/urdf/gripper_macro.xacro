@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+    <xacro:include filename="$(find kuka_common)/urdf/common_constants.xacro"/>
+    <xacro:include filename="$(find kuka_common)/urdf/common_materials.xacro"/>
+    <xacro:include filename="$(find aip_bosch_gripper)/urdf/gripper_macro.ros2_control.xacro"/>
+
+    <xacro:macro name="aip_bosch_gripper" params="prefix">
+        <link name="${prefix}gripper_base">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(270)}"/>
+                <geometry>
+                    <mesh filename="package://aip_bosch_gripper/meshes/visual/gripper_visual_base.stl"/>
+                </geometry>
+                <xacro:material_kuka_ral_silver_gray/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(270)}"/>
+                <geometry>
+                    <mesh filename="package://aip_bosch_gripper/meshes/collision/gripper_col_base.stl"/>
+                </geometry>
+            </collision>
+        </link>
+        <link name="${prefix}cylinder_back_left">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(270)}"/>
+                <geometry>
+                    <mesh filename="package://aip_bosch_gripper/meshes/visual/cylinder_back_left.stl"/>
+                </geometry>
+                <xacro:material_kuka_ral_silver_gray/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(270)}"/>
+                <geometry>
+                    <mesh filename="package://aip_bosch_gripper/meshes/collision/cylinder_col_bl.stl"/>
+                </geometry>
+            </collision>
+        </link>
+        <link name="${prefix}cylinder_back_right">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(270)}"/>
+                <geometry>
+                    <mesh filename="package://aip_bosch_gripper/meshes/visual/cylinder_back_right.stl"/>
+                </geometry>
+                <xacro:material_kuka_ral_silver_gray/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(270)}"/>
+                <geometry>
+                    <mesh filename="package://aip_bosch_gripper/meshes/collision/cylinder_col_br.stl"/>
+                </geometry>
+            </collision>
+        </link>
+        <link name="${prefix}cylinder_front_left">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(270)}"/>
+                <geometry>
+                    <mesh filename="package://aip_bosch_gripper/meshes/visual/cylinder_front_left.stl"/>
+                </geometry>
+                <xacro:material_kuka_ral_silver_gray/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(270)}"/>
+                <geometry>
+                    <mesh filename="package://aip_bosch_gripper/meshes/collision/cylinder_col_fl.stl"/>
+                </geometry>
+            </collision>
+        </link>
+        <link name="${prefix}cylinder_front_right">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(270)}"/>
+                <geometry>
+                    <mesh filename="package://aip_bosch_gripper/meshes/visual/cylinder_front_right.stl"/>
+                </geometry>
+                <xacro:material_kuka_ral_silver_gray/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(270)}"/>
+                <geometry>
+                    <mesh filename="package://aip_bosch_gripper/meshes/collision/cylinder_col_fr.stl"/>
+                </geometry>
+            </collision>
+        </link>
+        <link name="${prefix}tcp"/>
+        <link name="${prefix}tcp_1"/>
+        <link name="${prefix}tcp_2"/>
+        <link name="${prefix}tcp_3"/>
+        <link name="${prefix}tcp_4"/>
+        <link name="${prefix}tcp_5"/>
+        <link name="${prefix}tcp_6"/>
+        <link name="${prefix}tcp_7"/>
+
+        <joint name="${prefix}joint_cylinder_back_left" type="prismatic">
+            <parent link="${prefix}gripper_base"/>
+            <child link="${prefix}cylinder_back_left"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <axis xyz="1 0 0"/>
+            <limit effort="0" lower="0" upper="0.15" velocity="0.15"/>
+        </joint>
+        <joint name="${prefix}joint_cylinder_back_right" type="prismatic">
+            <parent link="${prefix}gripper_base"/>
+            <child link="${prefix}cylinder_back_right"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <axis xyz="1 0 0"/>
+            <limit effort="0" lower="0" upper="0.15" velocity="0.15"/>
+        </joint>
+        <joint name="${prefix}joint_cylinder_front_left" type="prismatic">
+            <parent link="${prefix}gripper_base"/>
+            <child link="${prefix}cylinder_front_left"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <axis xyz="1 0 0"/>
+            <limit effort="0" lower="0" upper="0.15" velocity="0.15"/>
+        </joint>
+        <joint name="${prefix}joint_cylinder_front_right" type="prismatic">
+            <parent link="${prefix}gripper_base"/>
+            <child link="${prefix}cylinder_front_right"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <axis xyz="1 0 0"/>
+            <limit effort="0" lower="0" upper="0.15" velocity="0.15"/>
+        </joint>
+        <joint name="${prefix}joint_tcp" type="fixed">
+            <parent link="${prefix}gripper_base"/>
+            <child link="${prefix}tcp"/>
+            <origin xyz="0 0 0" rpy="0 ${radians(270)} 0"/>
+        </joint>
+        <joint name="${prefix}joint_tcp_1" type="fixed">
+            <parent link="${prefix}gripper_base"/>
+            <child link="${prefix}tcp_1"/>
+            <origin xyz="0.299 -0.0815 -0.0485" rpy="0 0 0"/>
+        </joint>
+        <joint name="${prefix}joint_tcp_2" type="fixed">
+            <parent link="${prefix}gripper_base"/>
+            <child link="${prefix}tcp_2"/>
+            <origin xyz="0.299 0.0495 -0.0505" rpy="0 0 0"/>
+        </joint>
+        <joint name="${prefix}joint_tcp_3" type="fixed">
+            <parent link="${prefix}gripper_base"/>
+            <child link="${prefix}tcp_3"/>
+            <origin xyz="0.281 -0.106 0.075" rpy="0 0 0"/>
+        </joint>
+        <joint name="${prefix}joint_tcp_4" type="fixed">
+            <parent link="${prefix}gripper_base"/>
+            <child link="${prefix}tcp_4"/>
+            <origin xyz="0.299 0.055 0.0585" rpy="0 0 0"/>
+        </joint>
+        <joint name="${prefix}joint_tcp_5" type="fixed">
+            <parent link="${prefix}gripper_base"/>
+            <child link="${prefix}tcp_5"/>
+            <origin xyz="0.299 0.009 -0.049" rpy="0 0 0"/>
+        </joint>
+        <joint name="${prefix}joint_tcp_6" type="fixed">
+            <parent link="${prefix}gripper_base"/>
+            <child link="${prefix}tcp_6"/>
+            <origin xyz="0.299 0.054 0.001" rpy="0 0 0"/>
+        </joint>
+        <joint name="${prefix}joint_tcp_7" type="fixed">
+            <parent link="${prefix}gripper_base"/>
+            <child link="${prefix}tcp_7"/>
+            <origin xyz="0.299 0.015 0.001" rpy="0 0 0"/>
+        </joint>
+
+        <xacro:aip_gripper_ros2_control name="gripper_control" prefix="${prefix}"/>
+    </xacro:macro>
+</robot>
