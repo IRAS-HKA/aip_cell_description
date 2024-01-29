@@ -8,7 +8,7 @@ source start_docker.sh
 ```
 
 ```bash
-ros2 launch kuka_kr10r1100sixx_cell_description aip.launch.py
+ros2 launch aip_cell_description aip.launch.py
 # To use real hardware robot switch use_fake_hardware:=false
 ```
 

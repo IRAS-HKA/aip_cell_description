@@ -10,7 +10,7 @@ def generate_launch_description():
     declared_arguments = []
     declared_arguments.append(DeclareLaunchArgument(
         "robot_description_package",
-        default_value="kuka_kr10r1100sixx_cell_description",
+        default_value="aip_cell_description",
         description="Robot description package.",
     ))
 
@@ -54,7 +54,7 @@ def generate_launch_description():
 
     moveit_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            PathJoinSubstitution([FindPackageShare('kuka_kr10r1100sixx_cell_description'), 'launch', 'demo_modified.launch.py'])),
+            PathJoinSubstitution([FindPackageShare('aip_cell_description'), 'launch', 'demo_modified.launch.py'])),
         launch_arguments={
             "robot_ip": robot_ip,
             "use_fake_hardware": use_fake_hardware,

@@ -40,7 +40,7 @@ def generate_launch_description():
 
     declared_arguments.append(DeclareLaunchArgument(
         "robot_description_package",
-        default_value="kuka_kr10r1100sixx_cell_description",
+        default_value="aip_cell_description",
         description="Robot description package.",
     ))
 
@@ -124,7 +124,7 @@ def generate_launch_description():
     }
 
     kinematics_yaml = load_yaml(
-        "kuka_kr10r1100sixx_cell_description", "config/kinematics.yaml"
+        "aip_cell_description", "config/kinematics.yaml"
     )
 
     # Planning Functionality
@@ -136,7 +136,7 @@ def generate_launch_description():
         }
     }
     ompl_planning_yaml = load_yaml(
-        "kuka_kr10r1100sixx_cell_description", "config/ompl_planning.yaml"
+        "aip_cell_description", "config/ompl_planning.yaml"
     )
     ompl_planning_pipeline_config["move_group"].update(ompl_planning_yaml)
 
@@ -207,7 +207,7 @@ def generate_launch_description():
 
     # ros2_control using FakeSystem as hardware
     ros2_controllers_path = os.path.join(
-        get_package_share_directory("kuka_kr10r1100sixx_cell_description"),
+        get_package_share_directory("aip_cell_description"),
         "config",
         "ros2_controllers.yaml",
     )

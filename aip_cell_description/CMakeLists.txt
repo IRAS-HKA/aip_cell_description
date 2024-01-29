@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(kuka_kr10r1100sixx_cell_description)
+project(aip_cell_description)
 
 
 # Default to C99

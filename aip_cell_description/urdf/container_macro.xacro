@@ -8,14 +8,14 @@
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/bosch_container/visual/container_${number}.stl"/>
+                    <mesh filename="package://aip_cell_description/meshes/bosch_container/visual/container_${number}.stl"/>
                 </geometry>
                 <xacro:material_kuka_ral_pearly_white/>
             </visual>
             <collision>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/bosch_container/collision/container_${number}.stl"/>
+                    <mesh filename="package://aip_cell_description/meshes/bosch_container/collision/container_${number}.stl"/>
                 </geometry>
             </collision>
         </link>

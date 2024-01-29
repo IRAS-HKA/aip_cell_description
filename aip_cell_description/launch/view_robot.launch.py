@@ -14,7 +14,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_package",
-            default_value="kuka_kr10r1100sixx_cell_description",
+            default_value="aip_cell_description",
             description="Description package of the rrbot. Usually the argument is not set, \
         it enables use of a custom description.",
         )
@@ -74,7 +74,7 @@ def generate_launch_description():
 
     # Get SRDF file to publish robot_description_semantic
     robot_description_semantic_path = os.path.join(
-        get_package_share_directory("kuka_kr10r1100sixx_cell_description"),
+        get_package_share_directory("aip_cell_description"),
         'config',
         'kr10_cylinder.srdf'
     )

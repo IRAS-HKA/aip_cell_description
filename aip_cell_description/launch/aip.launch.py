@@ -56,7 +56,7 @@ def generate_launch_description():
     ))
     declared_arguments.append(DeclareLaunchArgument(
         "robot_description_package",
-        default_value="kuka_kr10r1100sixx_cell_description",
+        default_value="aip_cell_description",
         description="Robot description package",
     ))
     declared_arguments.append(DeclareLaunchArgument(
@@ -141,7 +141,7 @@ def generate_launch_description():
 
     kinematics_yaml = load_yaml("kuka_common_moveit_config", "config/kinematics.yaml")
     robot_description_kinematics = {"robot_description_kinematics": kinematics_yaml}
-    servo_yaml = load_yaml("kuka_kr10r1100sixx_cell_description", "config/kuka_servo_config.yaml")
+    servo_yaml = load_yaml("aip_cell_description", "config/kuka_servo_config.yaml")
     servo_params = {"moveit_servo": servo_yaml}
 
     servo_node = Node(
