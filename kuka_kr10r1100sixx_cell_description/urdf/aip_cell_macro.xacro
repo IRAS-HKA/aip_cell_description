@@ -8,14 +8,14 @@
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/kr10r1100sixx_cell/visual/table0.001.stl"/>
+                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/aip_cell/visual/table0.001.stl"/>
                 </geometry>
                 <xacro:material_kuka_ral_silver_gray/>
             </visual>
             <collision>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/kr10r1100sixx_cell/collision/table0.001.stl"/>
+                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/aip_cell/collision/table0.001.stl"/>
                 </geometry>
             </collision>
         </link>
@@ -23,14 +23,14 @@
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/kr10r1100sixx_cell/visual/shelf_new.stl"/>
+                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/aip_cell/visual/shelf_new.stl"/>
                 </geometry>
                 <xacro:material_kuka_ral_silver_gray/>
             </visual>
             <collision>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/kr10r1100sixx_cell/collision/shelf_new.stl"/>
+                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/aip_cell/collision/shelf_new.stl"/>
                 </geometry>
             </collision>
         </link>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+    <xacro:include filename="$(find kuka_common)/urdf/common_constants.xacro"/>
+    <xacro:include filename="$(find kuka_common)/urdf/common_materials.xacro"/>
+
+    <xacro:macro name="container" params="prefix number parent *origin">
+        <link name="${prefix}container">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/bosch_container/visual/container_${number}.stl"/>
+                </geometry>
+                <xacro:material_kuka_ral_pearly_white/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://kuka_kr10r1100sixx_cell_description/meshes/bosch_container/collision/container_${number}.stl"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="${prefix}joint_table-container" type="fixed">
+            <parent link="${prefix}${parent}"/>
+            <child link="${prefix}container"/>
+            <xacro:insert_block name="origin"/>
+        </joint>
+    </xacro:macro>
+</robot>
