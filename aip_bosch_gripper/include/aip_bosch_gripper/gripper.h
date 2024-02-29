@@ -3,7 +3,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include <kuka_eki_io_interface/kuka_eki_io_interface.h>
-#include <std_srvs/srv/trigger.hpp>
+#include <iras_interfaces/srv/move_gripper.hpp>
 
 namespace aip_bosch_gripper
 {
@@ -16,12 +16,12 @@ namespace aip_bosch_gripper
     private:
         std::string robot_ip_ = "robot_ip";
         std::shared_ptr<kuka_eki_io_interface::KukaEkiIOInterface> _kuka_eki_io_interface;
-        rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr _open_gripper_srv;
-        rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr _close_gripper_srv;
-        void open_gripper(const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
-                          std::shared_ptr<std_srvs::srv::Trigger::Response> response);
-        void close_gripper(const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
-                           std::shared_ptr<std_srvs::srv::Trigger::Response> response);
+        rclcpp::Service<iras_interfaces::srv::MoveGripper>::SharedPtr _open_gripper_srv;
+        rclcpp::Service<iras_interfaces::srv::MoveGripper>::SharedPtr _close_gripper_srv;
+        void open_gripper(const std::shared_ptr<iras_interfaces::srv::MoveGripper::Request> request,
+                          std::shared_ptr<iras_interfaces::srv::MoveGripper::Response> response);
+        void close_gripper(const std::shared_ptr<iras_interfaces::srv::MoveGripper::Request> request,
+                           std::shared_ptr<iras_interfaces::srv::MoveGripper::Response> response);
     };
 }
 #endif

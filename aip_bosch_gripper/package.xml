@@ -16,6 +16,7 @@
   <depend>rclcpp_lifecycle</depend>
   <depend>kuka_eki_io_interface</depend>
   <depend>std_srvs</depend>
+  <depend>iras_interfaces</depend>
 
 
   <export>

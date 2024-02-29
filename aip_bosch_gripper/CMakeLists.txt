@@ -15,12 +15,16 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(kuka_eki_io_interface REQUIRED)
 find_package(std_srvs REQUIRED)
+find_package(iras_interfaces REQUIRED)
+
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -52,6 +56,7 @@ ament_target_dependencies(
   rclcpp_lifecycle
   kuka_eki_io_interface
   std_srvs
+  iras_interfaces
 )
 ament_export_include_directories(
   include
@@ -82,7 +87,8 @@ ament_target_dependencies(
   kuka_eki_io_interface
   rclcpp
   std_srvs
-  rclcpp_lifecycle)
+  rclcpp_lifecycle
+  iras_interfaces)
 install(TARGETS
 aip_bosch_gripper_node
   DESTINATION lib/${PROJECT_NAME})
