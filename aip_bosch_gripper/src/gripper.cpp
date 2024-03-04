@@ -1,5 +1,9 @@
 #include <aip_bosch_gripper/gripper.h>
 
+#include <iostream>
+#include <thread>
+#include <chrono>
+
 using std::placeholders::_1;
 using std::placeholders::_2;
 
@@ -15,6 +19,9 @@ namespace aip_bosch_gripper
             {3, {44, 43, 133, 135, 35}},
             {4, {46, 45, 137, 139, 36}}
         };
+
+        rclcpp::Rate loop_rate(50);
+
 
         // Initalization of robot connection
         this->declare_parameter("robot_ip", "10.166.32.145");
@@ -33,27 +40,123 @@ namespace aip_bosch_gripper
         _kuka_eki_io_interface.reset(new kuka_eki_io_interface::KukaEkiIOInterface(robot_ip.c_str(), eki_io_port_.c_str(), n_io));
 
         _open_gripper_srv = this->create_service<iras_interfaces::srv::MoveGripper>("open_gripper", std::bind(&Gripper::open_gripper, this, _1, _2));
-        //_close_gripper_srv = this->create_service<iras_interfaces::srv::MoveGripper>("close_gripper", std::bind(&Gripper::close_gripper, this, _1, _2));
+        _close_gripper_srv = this->create_service<iras_interfaces::srv::MoveGripper>("close_gripper", std::bind(&Gripper::close_gripper, this, _1, _2));
 
         RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Ready to receive commands. ");
         RCLCPP_INFO(rclcpp::get_logger("Eigener Output: IP: "), robot_ip.c_str());
     }
 
-    /* Method close_gripper
+    // Method close_gripper
 
     void Gripper::close_gripper(const std::shared_ptr<iras_interfaces::srv::MoveGripper::Request> request,
                                 std::shared_ptr<iras_interfaces::srv::MoveGripper::Response> response)
     {
-        RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "CLOSE GRIPPER erreicht");
         
+        /* close_gripper contains the following movements per given cylinder: 
+                - eject cylinder 
+                - check if cylinder is ejected
+                - suction on (stays on => will be stopped in the open_gripper function)
+                - retract cylinder
+                - check if cylinder is retracted
+        */
+        
+        RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "CLOSE GRIPPER erreicht");
+
+
+        // ######## needed later on ###########
+
         // std::string requestStr = std::to_string(request -> cylinder_ids);
-        // std::string responseStr = std::to_string(response -> success);
-                
-        // response->success = true;
-        // RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Close Gripper: Funktionsaufruf beendet!");
-        // RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "---------------*******-----------------");
+        // std::string responseStr = std::to_string(response->success);
+        // RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Request: %s", requestStr.c_str());
+        // RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Response: %s", responseStr.c_str());
+        
+        std::vector<int> eject_pins;
+        std::vector<int> retract_pins;
+        std::vector<int> eject_check_pins;
+        std::vector<int> retract_check_pins;
+        std::vector<int> suction_pins;
+        for (auto const& cylinder_id : request->cylinder_ids)
+        {
+            eject_pins.push_back(cylinder_pins[cylinder_id][0]);
+            retract_pins.push_back(cylinder_pins[cylinder_id][1]);
+            eject_check_pins.push_back(cylinder_pins[cylinder_id][2]);
+            retract_check_pins.push_back(cylinder_pins[cylinder_id][3]);
+            suction_pins.push_back(cylinder_pins[cylinder_id][4]);
+        }
+        
+        //pins {c1_aus, c2_aus, c3_aus}
+        if (eject_pins.size() % 2 != 0)
+        {
+            eject_pins.push_back(eject_pins[0]);
+            retract_pins.push_back(retract_pins[0]);
+            eject_check_pins.push_back(eject_check_pins[0]);
+            retract_check_pins.push_back(retract_check_pins[0]);
+            suction_pins.push_back(suction_pins[0]);
+        }
+
+        //pins {c1_aus, c2_aus, c3_aus, c1_aus}
+        //for (std::vector<int>::size_type i = 0; i < eject_pins.size(); i+=2)
+        for (int i = 0; i < eject_pins.size(); i+=2)
+        {
+
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Execute command on eject pin: %d", eject_pins[i]);
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Execute command on eject pin: %d", eject_pins[i+1]);
+
+            // eject cylinder
+            execute_commands({eject_pins[i], eject_pins[i+1]}, {true, true});
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+        }
+
+        for (int i = 0; i < eject_pins.size(); i+=2)
+        {
+
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Reset extension eject pin: %d", eject_pins[i]);
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Reset extension eject pin: %d", eject_pins[i+1]);
+
+
+            // check if cylinder is ejected
+            // check_commands({eject_check_pins[i], eject_check_pins[i+1]}, {true, true});  // ##################
+            // reset the ejection pin command
+            execute_commands({eject_pins[i], eject_pins[i+1]}, {false, false});  
+        }
+
+        for (int i = 0; i < suction_pins.size(); i+=2)
+        {
+            
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Start vacuum suction pin: %d", suction_pins[i]);
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Start vacuum pin: %d", suction_pins[i+1]);
+
+            // suction on 
+            execute_commands({suction_pins[i], suction_pins[i+1]}, {false, false});   // change to false because open_gripper is not responsible for suction
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+
+        }
+        for (int i = 0; i < retract_pins.size(); i+=2)
+        {
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Retract pin: %d", retract_pins[i]);
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Retract pin: %d", retract_pins[i+1]);
+            // retract cylinder
+            execute_commands({retract_pins[i], retract_pins[i+1]}, {true, true});
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+
+        }
+        for (int i = 0; i < retract_pins.size(); i+=2)
+        {
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Reset retrction pin: %d", eject_pins[i]);
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Reset retrction pin: %d", eject_pins[i+1]);
+
+            // check if cylinder is retracted
+            // check_commands({retract_check_pins[i], retract_check_pins[i+1]}, {true, true}); // ###################
+            // reset the retraction pin command
+            execute_commands({retract_pins[i], retract_pins[i+1]}, {false, false});
+        }
+
+        response->success = true;
+        RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "CLOSE GRIPPER: Funktionsaufruf beendet!");
+        RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "---------------*******-----------------");
+
     }
-*/
+
 
     void Gripper::open_gripper(const std::shared_ptr<iras_interfaces::srv::MoveGripper::Request> request,
                                std::shared_ptr<iras_interfaces::srv::MoveGripper::Response> response)
@@ -105,31 +208,55 @@ namespace aip_bosch_gripper
         //for (std::vector<int>::size_type i = 0; i < eject_pins.size(); i+=2)
         for (int i = 0; i < eject_pins.size(); i+=2)
         {
+
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Execute command on eject pin: %d", eject_pins[i]);
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Execute command on eject pin: %d", eject_pins[i+1]);
+
             // eject cylinder
             execute_commands({eject_pins[i], eject_pins[i+1]}, {true, true});
+            std::this_thread::sleep_for(std::chrono::seconds(2));
         }
+
         for (int i = 0; i < eject_pins.size(); i+=2)
         {
+
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Reset extension eject pin: %d", eject_pins[i]);
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Reset extension eject pin: %d", eject_pins[i+1]);
+
+
             // check if cylinder is ejected
-            check_commands({eject_check_pins[i], eject_check_pins[i+1]}, {true, true});
+            // check_commands({eject_check_pins[i], eject_check_pins[i+1]}, {true, true});  // ##################
             // reset the ejection pin command
             execute_commands({eject_pins[i], eject_pins[i+1]}, {false, false});  
         }
 
         for (int i = 0; i < suction_pins.size(); i+=2)
         {
+            
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Start vacuum suction pin: %d", suction_pins[i]);
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Start vacuum pin: %d", suction_pins[i+1]);
+
             // suction on 
             execute_commands({suction_pins[i], suction_pins[i+1]}, {true, true});   // change to false because open_gripper is not responsible for suction
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+
         }
         for (int i = 0; i < retract_pins.size(); i+=2)
         {
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Retract pin: %d", retract_pins[i]);
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Retract pin: %d", retract_pins[i+1]);
             // retract cylinder
             execute_commands({retract_pins[i], retract_pins[i+1]}, {true, true});
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+
         }
         for (int i = 0; i < retract_pins.size(); i+=2)
         {
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Reset retrction pin: %d", eject_pins[i]);
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Reset retrction pin: %d", eject_pins[i+1]);
+
             // check if cylinder is retracted
-            check_commands({retract_check_pins[i], retract_check_pins[i+1]}, {true, true});
+            // check_commands({retract_check_pins[i], retract_check_pins[i+1]}, {true, true}); // ###################
             // reset the retraction pin command
             execute_commands({retract_pins[i], retract_pins[i+1]}, {false, false});
         }
@@ -162,19 +289,25 @@ namespace aip_bosch_gripper
 
         bool command_received = false;
 
-        while (!command_received)
+        while (!command_received && rclcpp::ok())
         {
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "In execute_commands - While loop");
+
             // _kuka_eki_io_interface->eki_write_command(set_io_pins_cmd, set_io_modes_cmd, set_target_ios_cmd);
             _kuka_eki_io_interface->eki_write_command(pins, set_io_types, values);
 
             loop_rate.sleep();
             _kuka_eki_io_interface->eki_read_state(io_states, io_pins, io_types, buff_len);
+
+            /*
             f_command_received = io_states[0] == values[0];
             s_command_received = io_states[1] == values[1];
             f_mode_set = io_types[0] == pins[0];
             s_mode_set = io_types[1] == pins[1];
            
             command_received = f_command_received && s_command_received && f_mode_set && s_mode_set;
+            */
+           command_received = true;
         }
     }
 
@@ -200,8 +333,9 @@ namespace aip_bosch_gripper
 
         bool opened = false;
 
-        while (!opened)
+        while (!opened && rclcpp::ok())
         {
+            RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "In check_commands - While loop");
             _kuka_eki_io_interface->eki_write_command(pins, set_io_types, values);
             loop_rate.sleep();
             _kuka_eki_io_interface->eki_read_state(io_states, io_pins, io_types, buff_len);

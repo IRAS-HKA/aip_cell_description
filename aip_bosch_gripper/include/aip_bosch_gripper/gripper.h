@@ -12,14 +12,7 @@ namespace aip_bosch_gripper
     public:
         Gripper();
         ~Gripper(){};
-        
-        //void open_gripper(const std::shared_ptr<iras_interfaces::srv::MoveGripper::Request> request,
-        //                  std::shared_ptr<iras_interfaces::srv::MoveGripper::Response> response);
-        //void close_gripper(const std::shared_ptr<iras_interfaces::srv::MoveGripper::Request> request,
-        //                   std::shared_ptr<iras_interfaces::srv::MoveGripper::Response> response);
-        // void executeCommands(int allPins[], bool valueOfPins[]);
-        //void controlCommands(int allPins[], bool valueOfPins[]);
-        
+      
 
     private:
         std::map<int, std::vector<int>> cylinder_pins;
@@ -31,8 +24,8 @@ namespace aip_bosch_gripper
         rclcpp::Service<iras_interfaces::srv::MoveGripper>::SharedPtr _close_gripper_srv;
         void open_gripper(const std::shared_ptr<iras_interfaces::srv::MoveGripper::Request> request,
                           std::shared_ptr<iras_interfaces::srv::MoveGripper::Response> response);
-        //void close_gripper(const std::shared_ptr<iras_interfaces::srv::MoveGripper::Request> request,
-        //                   std::shared_ptr<iras_interfaces::srv::MoveGripper::Response> response);
+        void close_gripper(const std::shared_ptr<iras_interfaces::srv::MoveGripper::Request> request,
+                           std::shared_ptr<iras_interfaces::srv::MoveGripper::Response> response);
     };
 }
 #endif
