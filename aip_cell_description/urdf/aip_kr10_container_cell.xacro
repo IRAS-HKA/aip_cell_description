@@ -58,6 +58,7 @@
     <joint name="$(arg prefix)joint_world-table" type="fixed">
         <parent link="$(arg prefix)world"/>
         <child link="$(arg prefix)table_link"/>
+        <child link="$(arg prefix)cell_frame"/>
         <origin xyz="0 0.6 0" rpy="0 0 0"/>
     </joint>
     <joint name="$(arg prefix)joint_world-base" type="fixed">
