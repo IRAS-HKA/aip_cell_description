@@ -104,7 +104,7 @@ namespace aip_bosch_gripper
 
 
             // check if cylinder is ejected
-            // check_commands({eject_check_pins[i], eject_check_pins[i+1]}, {true, true});  
+            check_commands({eject_check_pins[i], eject_check_pins[i+1]}, {true, true});  
             // reset the ejection pin command
             execute_commands({eject_pins[i], eject_pins[i+1]}, {false, false});  
         }
@@ -139,7 +139,7 @@ namespace aip_bosch_gripper
             RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Reset retraction pin: %d", eject_pins[i+1]);
 
             // check if cylinder is retracted
-            // check_commands({retract_check_pins[i], retract_check_pins[i+1]}, {true, true});
+            check_commands({retract_check_pins[i], retract_check_pins[i+1]}, {true, true});
             // reset the retraction pin command
             execute_commands({retract_pins[i], retract_pins[i+1]}, {false, false});
         }
@@ -204,7 +204,7 @@ namespace aip_bosch_gripper
 
 
             // check if cylinder is ejected
-            // check_commands({eject_check_pins[i], eject_check_pins[i+1]}, {true, true});  // ##################
+            check_commands({eject_check_pins[i], eject_check_pins[i+1]}, {true, true});  // ##################
             // reset the ejection pin command
             execute_commands({eject_pins[i], eject_pins[i+1]}, {false, false});  
         }
@@ -239,7 +239,7 @@ namespace aip_bosch_gripper
             RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Reset retraction pin: %d", eject_pins[i+1]);
 
             // check if cylinder is retracted
-            // check_commands({retract_check_pins[i], retract_check_pins[i+1]}, {true, true}); // ###################
+            check_commands({retract_check_pins[i], retract_check_pins[i+1]}, {true, true}); // ###################
             // reset the retraction pin command
             execute_commands({retract_pins[i], retract_pins[i+1]}, {false, false});
         }
@@ -276,21 +276,18 @@ namespace aip_bosch_gripper
         {
             RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "In execute_commands - While loop");
 
-            // _kuka_eki_io_interface->eki_write_command(set_io_pins_cmd, set_io_modes_cmd, set_target_ios_cmd);
             _kuka_eki_io_interface->eki_write_command(pins, set_io_types, values);
 
             loop_rate.sleep();
             _kuka_eki_io_interface->eki_read_state(io_states, io_pins, io_types, buff_len);
-
-            /*
+                   
             f_command_received = io_states[0] == values[0];
             s_command_received = io_states[1] == values[1];
-            f_mode_set = io_types[0] == pins[0];
-            s_mode_set = io_types[1] == pins[1];
+            f_mode_set = io_types[0] == set_io_types[0];
+            s_mode_set = io_types[1] == set_io_types[1];
            
             command_received = f_command_received && s_command_received && f_mode_set && s_mode_set;
-            */
-           command_received = true;
+            
         }
     }
 
@@ -322,12 +319,15 @@ namespace aip_bosch_gripper
             _kuka_eki_io_interface->eki_write_command(pins, set_io_types, values);
             loop_rate.sleep();
             _kuka_eki_io_interface->eki_read_state(io_states, io_pins, io_types, buff_len);
-            f_command_received = io_states[0] == true;
+       
+            f_command_received = io_states[0] == false;   
             s_command_received = io_states[1] == false;
-            f_mode_set = io_types[0] == set_io_types[0];
-            s_mode_set = io_types[1] == set_io_types[1];
+           
+            f_mode_set = io_types[0] == set_io_types[0]; 
+            s_mode_set = io_types[1] == set_io_types[1];  
+            
             opened = f_command_received && s_command_received && f_mode_set && s_mode_set;
-        
+
         }
         
     }
