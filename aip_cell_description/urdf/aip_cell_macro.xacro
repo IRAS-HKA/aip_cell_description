@@ -47,6 +47,23 @@
                 </geometry>
             </collision>
         </link>
+
+        <link name="${prefix}ejector">
+            <visual>
+                <origin xyz="0.09 -0.16 0.05" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://aip_cell_description/meshes/aip_cell/visual/Ejektoren.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <xacro:material_kuka_ral_light_ivory/>
+            </visual>
+            <collision>
+                <origin xyz="0.09 -0.16 0.05" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://aip_cell_description/meshes/aip_cell/collision/Ejektoren.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+        </link>
+
         <joint name="${prefix}joint_table-shelf" type="fixed">
             <parent link="${prefix}table_link"/>
             <child link="${prefix}shelf"/>

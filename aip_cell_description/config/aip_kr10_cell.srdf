@@ -64,6 +64,7 @@
     <disable_collisions link1="cylinder_back_right" link2="cylinder_front_left" reason="Never"/>
     <disable_collisions link1="cylinder_back_right" link2="cylinder_front_right" reason="Never"/>
     <disable_collisions link1="cylinder_front_left" link2="cylinder_front_right" reason="Never"/>
-
+    <disable_collisions link1="link_3" link2="ejector" reason="Adjacent"/>
+    <disable_collisions link1="link_4" link2="ejector" reason="Adjacent"/>
 
 </robot>

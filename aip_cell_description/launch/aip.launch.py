@@ -61,7 +61,7 @@ def generate_launch_description():
     ))
     declared_arguments.append(DeclareLaunchArgument(
         "robot_description_file",
-        default_value="aip_kr10_container_cell.xacro",
+        default_value="aip_kr10_cell.xacro",
         description="Robot description file located in <robot_description_package>/urdf/ .",
     ))
     declared_arguments.append(DeclareLaunchArgument(

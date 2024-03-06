@@ -32,5 +32,9 @@
         <child link="$(arg prefix)gripper_base"/>
         <origin xyz="0 0 0" rpy="0 0 0"/>
     </joint>
-
+    <joint name="$(arg prefix)joint_robot-ejector" type="fixed">
+        <parent link="$(arg prefix)link_4"/>
+        <child link="$(arg prefix)ejector"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
 </robot>
