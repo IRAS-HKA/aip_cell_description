@@ -5,7 +5,7 @@ The aip_bosch_gripper part includes the necessary drivers, service definitions, 
 ## Gripper.cpp
 
 ### Mapping from cylinder id to the hardware pins
-To enable an operation mode with different modes, the .cpp file contains a mapping from the cylinder_id to the corresponding hardware pins. This is based on the mapping as declared in the IO Mapping KUKA. Equivalent to this, the Work Visual is configured. You can also review the numbers on the KUKA SmartPad (HMI).
+To enable an operation mode with different modes, the .cpp file contains a mapping from the cylinder_id to the corresponding hardware pins. This is based on the mapping as declared in the[IO Mapping KUKA](/docs/mapping_hw_to_io_number.md). Equivalent to this, the Work Visual is configured. You can also review the numbers on the KUKA SmartPad (HMI).
 
 ``` 
 cylinder_pins = {
