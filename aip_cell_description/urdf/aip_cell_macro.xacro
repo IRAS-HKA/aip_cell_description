@@ -15,20 +15,20 @@
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="package://aip_cell_description/meshes/aip_cell/visual/Gestell.stl" scale="0.001 0.001 0.001" />
+                    <mesh filename="package://aip_cell_description/meshes/aip_cell/visual/Gestell.stl" scale="0.001 0.001 0.001"/>
                 </geometry>
                 <xacro:material_kuka_ral_silver_gray/>
             </visual>
             <collision>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="package://aip_cell_description/meshes/aip_cell/collision/table0.001.stl" scale="0.001 0.001 0.001" />
+                    <mesh filename="package://aip_cell_description/meshes/aip_cell/collision/table0.001.stl" scale="0.001 0.001 0.001"/>
                 </geometry>
             </collision>
             <collision>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="package://aip_cell_description/meshes/aip_cell/collision/Gestell.stl" scale="0.001 0.001 0.001" />
+                    <mesh filename="package://aip_cell_description/meshes/aip_cell/collision/Gestell.stl" scale="0.001 0.001 0.001"/>
                 </geometry>
             </collision>
         </link>

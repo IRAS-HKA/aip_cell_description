@@ -37,4 +37,14 @@
         <child link="$(arg prefix)ejector"/>
         <origin xyz="0 0 0" rpy="0 0 0"/>
     </joint>
+
+    <!-- Camera transformation -->
+    <link name="$(arg prefix)camera"/>
+
+    <joint name="$(arg prefix)table-camera" type="fixed">
+        <parent link="$(arg prefix)table_link"/>
+        <child link="$(arg prefix)camera"/>
+        <origin xyz="0 0 1" rpy="0 0 0"/>
+    </joint>
+
 </robot>
