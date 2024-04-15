@@ -28,7 +28,7 @@ sudo nmap -sU 10.166.32.145 -p 1-
 Home Pose
 ```xml
 <Action ID="MoveArmToJoints" joint1="0" joint2="-1.57" joint3="1.57" joint4="0" joint5="1.57" joint6="0"/>
-<Action ID="MoveArmToPose" cartesian="False" q_w="1" q_x="0" q_y="0" q_z="0" x="0.74" y="1" z="1.88"/>
+<Action ID="MoveArmToPose" cartesian="False" q_w="1" q_x="0" q_y="0" q_z="0" x="0.74" y="0.4" z="1.88"/>
 ```
 
 Find out the cartesian pose 
