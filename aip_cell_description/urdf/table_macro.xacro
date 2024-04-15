@@ -3,19 +3,12 @@
     <xacro:include filename="$(find kuka_common)/urdf/common_constants.xacro"/>
     <xacro:include filename="$(find kuka_common)/urdf/common_materials.xacro"/>
 
-    <xacro:macro name="aip_cell" params="prefix">
+    <xacro:macro name="table" params="prefix">
         <link name="${prefix}table_link">
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
                     <mesh filename="package://aip_cell_description/meshes/aip_cell/visual/table0.001.stl" scale="0.001 0.001 0.001"/>
-                </geometry>
-                <xacro:material_kuka_ral_silver_gray/>
-            </visual>
-            <visual>
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-                <geometry>
-                    <mesh filename="package://aip_cell_description/meshes/aip_cell/visual/Gestell.stl" scale="0.001 0.001 0.001"/>
                 </geometry>
                 <xacro:material_kuka_ral_silver_gray/>
             </visual>
@@ -25,14 +18,8 @@
                     <mesh filename="package://aip_cell_description/meshes/aip_cell/collision/table0.001.stl" scale="0.001 0.001 0.001"/>
                 </geometry>
             </collision>
-            <collision>
-                <origin xyz="0 0 0" rpy="0 0 0"/>
-                <geometry>
-                    <mesh filename="package://aip_cell_description/meshes/aip_cell/collision/Gestell.stl" scale="0.001 0.001 0.001"/>
-                </geometry>
-            </collision>
         </link>
-        <link name="${prefix}shelf">
+        <!-- <link name="${prefix}shelf">
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
@@ -46,7 +33,7 @@
                     <mesh filename="package://aip_cell_description/meshes/aip_cell/collision/shelf_new.stl"/>
                 </geometry>
             </collision>
-        </link>
+        </link> -->
 
         <link name="${prefix}ejector">
             <visual>
@@ -64,11 +51,11 @@
             </collision>
         </link>
 
-        <joint name="${prefix}joint_table-shelf" type="fixed">
+        <!-- <joint name="${prefix}joint_table-shelf" type="fixed">
             <parent link="${prefix}table_link"/>
             <child link="${prefix}shelf"/>
             <origin xyz="0.242 0.806 0.908" rpy="0 0 0"/>
-        </joint>
+        </joint> -->
 
     </xacro:macro>
 </robot>

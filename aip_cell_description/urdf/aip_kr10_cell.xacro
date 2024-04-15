@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot name="aip_kr10_cell" xmlns:xacro="http://wiki.ros.org/xacro">
-    <xacro:include filename="$(find aip_cell_description)/urdf/aip_cell_macro.xacro"/>
+    <xacro:include filename="$(find aip_cell_description)/urdf/table_macro.xacro"/>
+    <xacro:include filename="$(find aip_cell_description)/urdf/camera_rack_macro.xacro"/>
     <xacro:include filename="$(find aip_bosch_gripper)/urdf/gripper_macro.xacro"/>
     <xacro:include filename="$(find kuka_kr10_description)/urdf/kr10r1100sixx_macro.xacro"/>
 
@@ -14,18 +15,24 @@
         robot_ip="$(arg robot_ip)" eki_robot_port="$(arg eki_robot_port)"
         use_fake_hardware="$(arg use_fake_hardware)"/>
     <xacro:aip_bosch_gripper prefix="$(arg prefix)"/>
-    <xacro:aip_cell prefix="$(arg prefix)"/>
+    <xacro:table prefix="$(arg prefix)"/>
+    <xacro:camera_rack prefix="$(arg prefix)"/>
 
     <link name="$(arg prefix)world"/>
-    <joint name="$(arg prefix)joint_world-table" type="fixed">
+    <joint name="$(arg prefix)world-table" type="fixed">
         <parent link="$(arg prefix)world"/>
         <child link="$(arg prefix)table_link"/>
-        <origin xyz="0 0.6 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
     </joint>
-    <joint name="$(arg prefix)joint_world-base" type="fixed">
+    <joint name="$(arg prefix)world-rack" type="fixed">
+        <parent link="$(arg prefix)world"/>
+        <child link="$(arg prefix)camera_rack_link"/>
+        <origin xyz="-0.7 0 0" rpy="0 0 0"/>
+    </joint>
+    <joint name="$(arg prefix)world-base" type="fixed">
         <parent link="$(arg prefix)world"/>
         <child link="$(arg prefix)base_link"/>
-        <origin xyz="0.2 1 0.965" rpy="0 0 0"/>
+        <origin xyz="0.2 0.4 0.965" rpy="0 0 0"/>
     </joint>
     <joint name="$(arg prefix)joint_flange-gripper" type="fixed">
         <parent link="$(arg prefix)flange"/>
@@ -40,10 +47,11 @@
 
     <!-- Camera transformation -->
     <link name="$(arg prefix)camera"/>
-    <joint name="$(arg prefix)table-camera" type="fixed">
-        <parent link="$(arg prefix)table_link"/>
+    <joint name="$(arg prefix)world-camera" type="fixed">
+        <parent link="$(arg prefix)world"/>
         <child link="$(arg prefix)camera"/>
-        <origin xyz="0.7 1 2.1" rpy="0 3.14 0"/>
+        <origin xyz="0.612 0.954 2.207" rpy="0 3.14 0"/>
     </joint>
+
 
 </robot>
