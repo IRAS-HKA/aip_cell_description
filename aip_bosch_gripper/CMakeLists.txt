@@ -23,7 +23,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(kuka_eki_io_interface REQUIRED)
 find_package(std_srvs REQUIRED)
-find_package(iras_interfaces REQUIRED)
+find_package(aip_interfaces REQUIRED)
 
 # uncomment the following section in order to fill in
 # further dependencies manually.
@@ -56,7 +56,7 @@ ament_target_dependencies(
   rclcpp_lifecycle
   kuka_eki_io_interface
   std_srvs
-  iras_interfaces
+  aip_interfaces
 )
 ament_export_include_directories(
   include
@@ -88,7 +88,7 @@ ament_target_dependencies(
   rclcpp
   std_srvs
   rclcpp_lifecycle
-  iras_interfaces)
+  aip_interfaces)
 install(TARGETS
 aip_bosch_gripper_node
   DESTINATION lib/${PROJECT_NAME})

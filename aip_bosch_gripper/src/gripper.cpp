@@ -40,16 +40,16 @@ namespace aip_bosch_gripper
 
         _kuka_eki_io_interface.reset(new kuka_eki_io_interface::KukaEkiIOInterface(robot_ip.c_str(), eki_io_port_.c_str(), n_io));
 
-        _open_gripper_srv = this->create_service<iras_interfaces::srv::MoveGripper>("open_gripper", std::bind(&Gripper::open_gripper, this, _1, _2));
-        _close_gripper_srv = this->create_service<iras_interfaces::srv::MoveGripper>("close_gripper", std::bind(&Gripper::close_gripper, this, _1, _2));
+        _open_gripper_srv = this->create_service<aip_interfaces::srv::MoveGripper>("open_gripper", std::bind(&Gripper::open_gripper, this, _1, _2));
+        _close_gripper_srv = this->create_service<aip_interfaces::srv::MoveGripper>("close_gripper", std::bind(&Gripper::close_gripper, this, _1, _2));
 
         RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "Ready to receive commands. ");
         RCLCPP_INFO(rclcpp::get_logger("Eigener Output: IP: "), robot_ip.c_str());
     }
 
 
-    void Gripper::close_gripper(const std::shared_ptr<iras_interfaces::srv::MoveGripper::Request> request,
-                                std::shared_ptr<iras_interfaces::srv::MoveGripper::Response> response)
+    void Gripper::close_gripper(const std::shared_ptr<aip_interfaces::srv::MoveGripper::Request> request,
+                                std::shared_ptr<aip_interfaces::srv::MoveGripper::Response> response)
     {
                
         RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "CLOSE GRIPPER erreicht");
@@ -151,8 +151,8 @@ namespace aip_bosch_gripper
     }
 
 
-    void Gripper::open_gripper(const std::shared_ptr<iras_interfaces::srv::MoveGripper::Request> request,
-                               std::shared_ptr<iras_interfaces::srv::MoveGripper::Response> response)
+    void Gripper::open_gripper(const std::shared_ptr<aip_interfaces::srv::MoveGripper::Request> request,
+                               std::shared_ptr<aip_interfaces::srv::MoveGripper::Response> response)
     {
         
         RCLCPP_INFO(rclcpp::get_logger("aip_bosch_gripper_node"), "OPEN GRIPPER erreicht");
