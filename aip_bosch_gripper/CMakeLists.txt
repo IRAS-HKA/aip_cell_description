@@ -19,7 +19,9 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(kuka_eki_io_interface REQUIRED)
 find_package(std_srvs REQUIRED)
@@ -53,6 +55,7 @@ target_include_directories(
 ament_target_dependencies(
   ${PROJECT_NAME}
   rclcpp
+  rclpy
   rclcpp_lifecycle
   kuka_eki_io_interface
   std_srvs
@@ -93,10 +96,18 @@ install(TARGETS
 aip_bosch_gripper_node
   DESTINATION lib/${PROJECT_NAME})
 
+ament_python_install_package(${PROJECT_NAME})
+
+install(PROGRAMS
+scripts/GripperVisualizerNode.py
+scripts/test_gripper_viz_client.py
+DESTINATION lib/${PROJECT_NAME})
+
 install(DIRECTORY
   urdf
   meshes
   launch
+  config
   DESTINATION share/${PROJECT_NAME}/
 )
 ament_package()
