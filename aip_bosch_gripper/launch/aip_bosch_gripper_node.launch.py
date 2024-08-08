@@ -25,9 +25,16 @@ def generate_launch_description():
         description="Port by which the robot can be reached."
     ))
 
+    declared_arguments.append(DeclareLaunchArgument(
+        "only_visualize",
+        default_value="false",
+        description="If true, the node will only visualize the gripper state."
+    ))
+
     robot_ip = LaunchConfiguration("robot_ip")
     eki_io_port = LaunchConfiguration("eki_io_port")
     n_io = LaunchConfiguration("n_io")
+    only_visualize = LaunchConfiguration("only_visualize")
 
     eki_io_node = Node(
         package="aip_bosch_gripper",
@@ -39,6 +46,22 @@ def generate_launch_description():
         ],
         output='screen'
     )
-    return LaunchDescription(declared_arguments + [
-        eki_io_node
-    ])
+    if not only_visualize:
+        return LaunchDescription(declared_arguments + [
+            eki_io_node, 
+            Node(
+                package="aip_bosch_gripper",
+                executable="gripper_visualizer_node",
+                name="gripper_visualizer_node",
+                output='screen',
+            )
+        ])
+    else:
+        return LaunchDescription(declared_arguments + [
+            Node(
+                package="aip_bosch_gripper",
+                executable="gripper_visualizer_node",
+                name="gripper_visualizer_node",
+                output='screen',
+            )
+        ])
