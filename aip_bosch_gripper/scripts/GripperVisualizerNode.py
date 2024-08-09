@@ -41,6 +41,9 @@ class GripperVisualizerNode(Node):
         extensions = [0.0, 0.0, 0.0, 0.0]
         for cylinder_id in request.cylinders.cylinder_ids:
             extensions[cylinder_id - 1] = request.cylinders.extensions[request.cylinders.cylinder_ids.index(cylinder_id)]
+        extensions[0], extensions[1] = float(extensions[1]), float(extensions[0])
+        extensions[2], extensions[3] = float(extensions[3]), float(extensions[2])
+        extensions.reverse()
         cylinder_activations.data = extensions
         names = [self.joint_name_map[cylinder_id - 1] for cylinder_id in request.cylinders.cylinder_ids]  # Replace with your joint names
         self.get_logger().info(f"Extending Cylinders:{names}")
@@ -59,6 +62,9 @@ class GripperVisualizerNode(Node):
         extensions = [0.0, 0.0, 0.0, 0.0]
         for cylinder_id in request.cylinders.cylinder_ids:
             extensions[cylinder_id - 1] = request.cylinders.extensions[request.cylinders.cylinder_ids.index(cylinder_id)]
+        extensions[0], extensions[1] = float(extensions[1]), float(extensions[0])
+        extensions[2], extensions[3] = float(extensions[3]), float(extensions[2])
+        extensions.reverse()
         cylinder_activations.data = extensions
         names = [self.joint_name_map[cylinder_id - 1] for cylinder_id in request.cylinders.cylinder_ids]  # Replace with your joint names
         self.get_logger().info(f"Extending Cylinders:{names}")
