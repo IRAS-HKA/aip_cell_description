@@ -69,6 +69,12 @@ def generate_launch_description():
         default_value="aip_kr10_cell.srdf",
         description="Semantic robot description file located in <robot_description_package>/config/ .",
     ))
+    declared_arguments.append(DeclareLaunchArgument(
+        "robot_controller",
+        default_value="gripper_controller",
+        choices=["gripper_controller", "position_trajectory_controller", "joint_state_controller"],
+        description="Robot controller to start.",
+    ))
 
     # Initialize Arguments
     robot_ip = LaunchConfiguration("robot_ip")
@@ -80,6 +86,8 @@ def generate_launch_description():
     robot_description_package = LaunchConfiguration("robot_description_package")
     robot_description_file = LaunchConfiguration("robot_description_file")
     semantic_description_file = LaunchConfiguration("semantic_description_file")
+    robot_controller = LaunchConfiguration("robot_controller")
+
 
     robot_description_content = Command(
         [
@@ -116,6 +124,16 @@ def generate_launch_description():
             "robot_description_file": robot_description_file
         }.items(),
     )
+    robot_controllers = [robot_controller]
+    robot_controller_spawners = []
+    for controller in robot_controllers:
+        robot_controller_spawners += [
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=[controller, "-c", "/controller_manager"],
+            )
+        ]
 
     # gripper_launch = IncludeLaunchDescription(
     #     PythonLaunchDescriptionSource(

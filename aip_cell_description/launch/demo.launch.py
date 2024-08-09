@@ -123,14 +123,32 @@ def generate_launch_description():
     ompl_planning_pipeline_config = {
         "move_group": {
             "planning_plugin": "ompl_interface/OMPLPlanner",
-            "request_adapters": """default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/ResolveConstraintFrames default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""",
+            # "request_adapters": """default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/ResolveConstraintFrames default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""",
             "start_state_max_bounds_error": 0.1,
         }
     }
+
     ompl_planning_yaml = load_yaml(
         "kuka_common_moveit_config", "config/ompl_planning.yaml"
     )
     ompl_planning_pipeline_config["move_group"].update(ompl_planning_yaml)
+
+    # Stomp
+    stomp_planning_pipeline_config = {
+        "move_group": {
+            "planning_plugin": "stomp_interface/STOMPPlanner",
+            # "request_adapters": """default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/ResolveConstraintFrames default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""",
+            "start_state_max_bounds_error": 0.1,
+        }
+    }
+
+    stomp_planning_pipeline_config_planning_yaml = load_yaml(
+        "kuka_common_moveit_config", "config/stomp_planning.yaml"
+    )
+
+    stomp_planning_pipeline_config["move_group"].update(stomp_planning_pipeline_config_planning_yaml)
+
+
 
     # Trajectory Execution Functionality
     moveit_simple_controllers_yaml = load_yaml(
@@ -164,7 +182,8 @@ def generate_launch_description():
             robot_description,
             robot_description_semantic,
             kinematics_yaml,
-            ompl_planning_pipeline_config,
+            # ompl_planning_pipeline_config,
+            stomp_planning_pipeline_config,
             trajectory_execution,
             moveit_controllers,
             planning_scene_monitor_parameters,
@@ -184,6 +203,7 @@ def generate_launch_description():
             robot_description,
             robot_description_semantic,
             ompl_planning_pipeline_config,
+            stomp_planning_pipeline_config,
             kinematics_yaml,
         ],
     )

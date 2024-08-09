@@ -3,6 +3,7 @@
 import rclpy
 import random
 from aip_interfaces.msg import MoveCylinders
+from aip_interfaces.srv import VizCloseGripper, VizOpenGripper
 
 def get_random_cylinder_ids():
     return random.sample(range(1, 5), random.randint(1,4))
@@ -30,5 +31,26 @@ def main(args=None):
     node.destroy_node()
     rclpy.shutdown()
 
+def test_service(args=None):
+    rclpy.init(args=args)
+    node = rclpy.create_node('gripper_viz_client', parameter_overrides=[])
+    node.get_logger().info("Starting Gripper Visualizer Client")
+    client = node.create_client(VizCloseGripper, '/viz_close_gripper')
+    request = VizCloseGripper.Request()
+    request.cylinders.cylinder_ids = get_random_cylinder_ids()
+    request.cylinders.extensions = [0.14,] * len(request.cylinders.cylinder_ids)
+    node.get_logger().info(f"Sending CloseGripper request: {request}")
+    future = client.call_async(request)
+    rclpy.spin_until_future_complete(node, future)
+    if future.result() is not None:
+        node.get_logger().info(f"Response: {future.result()}")
+    else:
+        node.get_logger().error(f"Service call failed: {future.exception()}")
+    node.destroy_node()
+    rclpy.shutdown()
+    
+
+
 if __name__ == '__main__':
-    main()
+    # main()
+    test_service()
