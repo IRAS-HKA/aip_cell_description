@@ -51,7 +51,7 @@ def generate_launch_description():
             eki_io_node, 
             Node(
                 package="aip_bosch_gripper",
-                executable="gripper_visualizer_node",
+                executable="GripperVisualizerNode.py",
                 name="gripper_visualizer_node",
                 output='screen',
             )
@@ -60,7 +60,7 @@ def generate_launch_description():
         return LaunchDescription(declared_arguments + [
             Node(
                 package="aip_bosch_gripper",
-                executable="gripper_visualizer_node",
+                executable="GripperVisualizerNode.py",
                 name="gripper_visualizer_node",
                 output='screen',
             )
