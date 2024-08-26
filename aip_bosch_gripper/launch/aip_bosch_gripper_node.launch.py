@@ -46,7 +46,9 @@ def generate_launch_description():
         ],
         output='screen'
     )
-    if not only_visualize:
+    print(f"Flag val: {only_visualize}")
+    if not only_visualize == "true":
+        print("Starting gripper node with IO")
         return LaunchDescription(declared_arguments + [
             eki_io_node, 
             Node(
@@ -57,6 +59,7 @@ def generate_launch_description():
             )
         ])
     else:
+        print("Starting gripper node without IO")
         return LaunchDescription(declared_arguments + [
             Node(
                 package="aip_bosch_gripper",
