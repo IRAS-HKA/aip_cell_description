@@ -4,6 +4,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import Node
+from launch.actions import ExecuteProcess
 from launch.substitutions import Command, FindExecutable
 from ament_index_python.packages import get_package_share_directory
 import os
@@ -75,6 +76,17 @@ def generate_launch_description():
         choices=["gripper_controller", "position_trajectory_controller", "joint_state_controller"],
         description="Robot controller to start.",
     ))
+    declared_arguments.append(DeclareLaunchArgument(
+        "robot_controller",
+        default_value="gripper_controller",
+        choices=["gripper_controller", "position_trajectory_controller", "joint_state_controller"],
+        description="Robot controller to start.",
+    ))
+    declared_arguments.append(DeclareLaunchArgument(
+        "robot_control_package",
+        default_value="aip_cell_description",
+        description="Robot control package",
+    ))
 
     # Initialize Arguments
     robot_ip = LaunchConfiguration("robot_ip")
@@ -87,7 +99,7 @@ def generate_launch_description():
     robot_description_file = LaunchConfiguration("robot_description_file")
     semantic_description_file = LaunchConfiguration("semantic_description_file")
     robot_controller = LaunchConfiguration("robot_controller")
-
+    robot_control_package = LaunchConfiguration("robot_control_package")
 
     robot_description_content = Command(
         [
@@ -121,9 +133,11 @@ def generate_launch_description():
             "use_fake_hardware": use_fake_hardware,
             "eki_robot_port": eki_robot_port,
             "robot_description_package": robot_description_package,
-            "robot_description_file": robot_description_file
+            "robot_description_file": robot_description_file,
+            "robot_control_package": robot_control_package
         }.items(),
     )
+    
     robot_controllers = [robot_controller]
     robot_controller_spawners = []
     for controller in robot_controllers:
@@ -144,6 +158,16 @@ def generate_launch_description():
     #         "n_io": n_io,
     #     }.items(),
     # )
+
+    load_controllers = []
+    for controller in ["gripper_controller"]:
+        load_controllers += [
+            ExecuteProcess(
+                cmd=["ros2 run controller_manager spawner {}".format(controller)],
+                shell=True,
+                output="screen",
+            )
+        ]
 
     moveit_wrapper_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -174,4 +198,4 @@ def generate_launch_description():
         output="screen",
     )
 
-    return LaunchDescription(declared_arguments + [moveit_launch, moveit_wrapper_launch, servo_node])
+    return LaunchDescription(declared_arguments + [moveit_launch, moveit_wrapper_launch, servo_node] + load_controllers)
