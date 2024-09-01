@@ -44,3 +44,44 @@ This method contains the logic to close the gripper. The structure is analog the
 
 Consequently, the suction is turned off after the cylinder has been ejected. To complete the cycle, the cylinder is retracted again.
 
+
+## Gripper Visualization (Rviz)
+The `GripperVisualizerNode`is a simple node which provides services to visualize the opening and closing of the grippers. When the open or close services are called, the Node will publish the corresponding gripper state to the `/gripper_controller/commands` topic. Each of the four cylinders can be actuated individually within Rviz and the extension can also be specified.
+
+It is essential to specify the gripper configuration within the `ros2_controllers.yaml`file in `aip_cell_description`package for this to work correctly. The following configuration is an example of how to configure the aip bosch gripper:
+
+```yaml
+gripper_controller:
+  ros__parameters:
+    joints:
+      - joint_cylinder_back_left
+      - joint_cylinder_back_right
+      - joint_cylinder_front_left
+      - joint_cylinder_front_right
+    interface_name: position
+```
+
+The node offers two services – `/viz_open_gripper` and `/viz_close_gripper`. The services are called with the following service type:
+
+```
+MoveCylinders cylinders
+---
+bool result
+```
+with the following definition of the `MoveCylinders` message:
+
+```
+int32[] cylinder_ids
+float32[] extensions
+```
+Currently, both services are defined identically, however the implementation can be extended to include additional gripper movements or also the attachment or detachment of collision objects to the corresponding grippers. 
+
+![Gripper Visualization](docs/Gripper_viz.png)
+
+### Starting the Gripper Visualization Node
+To start the gripper visualization node, the following command can be used:
+
+```bash
+ros2 launch aip_bosch_gripper aip_bosch_gripper_node.launch.py only_visualize:=<true|false>
+```
+If `only_visualize` is set to `true`, the node will only visualize the gripper movement in Rviz. If set to `false`, the gripper on the real robot will also be actuated.
