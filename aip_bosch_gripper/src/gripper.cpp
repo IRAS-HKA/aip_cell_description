@@ -60,7 +60,7 @@ namespace aip_bosch_gripper
         std::vector<int> eject_check_pins;
         std::vector<int> retract_check_pins;
         std::vector<int> suction_pins;
-        for (auto const& cylinder_id : request->cylinder_ids)
+        for (auto const& cylinder_id : request->cylinder_ids.cylinder_ids)
         {
             eject_pins.push_back(cylinder_pins[cylinder_id][0]);
             retract_pins.push_back(cylinder_pins[cylinder_id][1]);
@@ -163,7 +163,7 @@ namespace aip_bosch_gripper
         std::vector<int> eject_check_pins;
         std::vector<int> retract_check_pins;
         std::vector<int> suction_pins;
-        for (auto const& cylinder_id : request->cylinder_ids)
+        for (auto const& cylinder_id : request->cylinder_ids.cylinder_ids)
         {
             eject_pins.push_back(cylinder_pins[cylinder_id][0]);
             retract_pins.push_back(cylinder_pins[cylinder_id][1]);
